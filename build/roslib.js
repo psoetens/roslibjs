@@ -1,4 +1,4 @@
-/**
+/*
  * @author Russell Toris - rctoris@wpi.edu
  */
 
@@ -255,8 +255,8 @@ ROSLIB.Param = function(options) {
  * @param callback - function with the following params:
  *  * value - the value of the param from ROS.
  */
-ROSLIB.Param.prototype.get = function(callback) {
-  var paramClient = new ROSLIB.Service({
+  ROSLIB.Param.prototype.get = function(callback) {
+    var paramClient = new ROSLIB.Service({
     ros : this.ros,
     name : '/rosapi/get_param',
     serviceType : 'rosapi/GetParam'
@@ -267,10 +267,24 @@ ROSLIB.Param.prototype.get = function(callback) {
     value : JSON.stringify('')
   });
 
-  paramClient.callService(request, function(result) {
+   /* 
+    paramClient.callService(request, function(result) {
     var value = JSON.parse(result.value);
     callback(value);
   });
+*/
+
+  paramClient.callService(request, function(result) {
+
+    if ( result.value == undefined ) {
+        callback(undefined);
+        return;
+    }  
+    var value = JSON.parse(result.value);
+    callback(value);
+  });
+
+
 };
 
 /**
